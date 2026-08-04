@@ -683,6 +683,9 @@ svg.leaflet-image-layer.leaflet-interactive path {
   --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,monospace;
   --sans:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Noto Sans KR",system-ui,sans-serif;
   --bot:calc(env(safe-area-inset-bottom,0px) + 104px);
+  /* 지도 위에 얹히는 것들 — 타일 밝기에 맞춰 같이 뒤집힌다 */
+  --mapbg:#EDEFE9; --pinbg:#fff; --pinink:#12211B; --pinhalo:#fff;
+  --ondc:#fff; --mapchip:rgba(255,255,255,.82); --mapchip-ink:#3C4A44; --mapchip-line:#7C8983;
 }
 @media (prefers-color-scheme:dark){:root{
   --bg:#10171A; --ink:#E6EDE9; --ink-2:#A9B6B0; --ink-3:#75837D;
@@ -690,18 +693,24 @@ svg.leaflet-image-layer.leaflet-interactive path {
   --accent:#E8836A;
   --d1:#2FC287; --d2:#F0A248; --d3:#4FA6DE; --d4:#BC8AE0; --d5:#E8836A;
   --shadow:0 1px 2px rgba(0,0,0,.5), 0 12px 32px -12px rgba(0,0,0,.8);
+  --mapbg:#0E1418; --pinbg:#1B242A; --pinink:#EDF3EF; --pinhalo:#0B1014;
+  --ondc:#0B1210; --mapchip:rgba(16,23,26,.82); --mapchip-ink:#9DAAA4; --mapchip-line:#5C6A64;
 }}
 :root[data-theme="dark"]{
   --bg:#10171A; --ink:#E6EDE9; --ink-2:#A9B6B0; --ink-3:#75837D;
   --panel:#18211F; --panel-2:#131B19; --line:#2C3835;
   --accent:#E8836A; --d1:#2FC287; --d2:#F0A248; --d3:#4FA6DE; --d4:#BC8AE0; --d5:#E8836A;
   --shadow:0 1px 2px rgba(0,0,0,.5), 0 12px 32px -12px rgba(0,0,0,.8);
+  --mapbg:#0E1418; --pinbg:#1B242A; --pinink:#EDF3EF; --pinhalo:#0B1014;
+  --ondc:#0B1210; --mapchip:rgba(16,23,26,.82); --mapchip-ink:#9DAAA4; --mapchip-line:#5C6A64;
 }
 :root[data-theme="light"]{
   --bg:#EAEDE9; --ink:#141A17; --ink-2:#4A5651; --ink-3:#7C8983;
   --panel:#FBFCFA; --panel-2:#F1F4F0; --line:#D5DCD6;
   --accent:#B4472C; --d1:#0E8F5C; --d2:#C96A10; --d3:#1268A4; --d4:#8E4BAF; --d5:#B4472C;
   --shadow:0 1px 2px rgba(20,26,23,.10), 0 10px 28px -12px rgba(20,26,23,.30);
+  --mapbg:#EDEFE9; --pinbg:#fff; --pinink:#12211B; --pinhalo:#fff;
+  --ondc:#fff; --mapchip:rgba(255,255,255,.82); --mapchip-ink:#3C4A44; --mapchip-line:#7C8983;
 }
 *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
 html,body{height:100%; margin:0; overscroll-behavior:none}
@@ -713,30 +722,30 @@ a{color:var(--accent)}
 .mono{font-family:var(--mono); font-variant-numeric:tabular-nums}
 
 /* ── 지도 ── */
-#map{position:fixed; inset:0; background:#EDEFE9}
-.leaflet-container{background:#EDEFE9; font-family:var(--sans)}
+#map{position:fixed; inset:0; background:var(--mapbg)}
+.leaflet-container{background:var(--mapbg); font-family:var(--sans)}
 .leaflet-bottom.leaflet-left{bottom:calc(var(--bot) - 4px); left:4px}
-.leaflet-control-attribution{background:rgba(255,255,255,.82)!important;
-  color:#5A665F!important; font-size:9px!important; padding:1px 6px; border-radius:5px;
+.leaflet-control-attribution{background:var(--mapchip)!important;
+  color:var(--mapchip-ink)!important; font-size:9px!important; padding:1px 6px; border-radius:5px;
   white-space:nowrap; line-height:1.5}
-.leaflet-control-attribution a{color:var(--ink-2)!important}
-.leaflet-control-scale-line{background:rgba(255,255,255,.82); color:#3C4A44;
-  border-color:#7C8983!important; font-family:var(--mono); font-size:10px; padding:1px 5px}
+.leaflet-control-attribution a{color:var(--mapchip-ink)!important}
+.leaflet-control-scale-line{background:var(--mapchip); color:var(--mapchip-ink);
+  border-color:var(--mapchip-line)!important; font-family:var(--mono); font-size:10px; padding:1px 5px}
 
 /* 핀 */
 .pin{display:grid; place-items:center; width:100%; height:100%; position:relative}
-.pin.stop b{width:28px; height:28px; border-radius:50%; background:#fff; border:2.5px solid var(--dc);
+.pin.stop b{width:28px; height:28px; border-radius:50%; background:var(--pinbg); border:2.5px solid var(--dc);
   color:var(--dc); font:800 12px/1 var(--mono); display:grid; place-items:center;
   box-shadow:0 1px 5px rgba(0,0,0,.28); transition:transform .12s}
-.pin.multi b{background:var(--dc); color:#fff}
-.pin.on b{background:var(--dc); color:#fff; transform:scale(1.16)}
+.pin.multi b{background:var(--dc); color:var(--ondc)}
+.pin.on b{background:var(--dc); color:var(--ondc); transform:scale(1.16)}
 .pin.opt b{border-style:dashed}
 .pin .pinlabel{position:absolute; left:calc(50% + 19px); top:50%; transform:translateY(-50%); font-style:normal;
-  font-size:11.5px; font-weight:800; letter-spacing:-.02em; white-space:nowrap; color:#12211B; pointer-events:none;
-  text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 5px #fff,0 0 9px #fff,0 0 12px #fff}
-.pin.move{width:13px; height:13px; border-radius:50%; background:var(--dc); opacity:.85; border:2px solid #fff}
-.pin.stay{width:28px; height:28px; border-radius:50%; background:#fff; border:2px solid #12211B;
-  color:#12211B; box-shadow:0 1px 5px rgba(0,0,0,.3)}
+  font-size:11.5px; font-weight:800; letter-spacing:-.02em; white-space:nowrap; color:var(--pinink); pointer-events:none;
+  text-shadow:0 0 3px var(--pinhalo),0 0 3px var(--pinhalo),0 0 5px var(--pinhalo),0 0 9px var(--pinhalo),0 0 12px var(--pinhalo)}
+.pin.move{width:13px; height:13px; border-radius:50%; background:var(--dc); opacity:.85; border:2px solid var(--pinbg)}
+.pin.stay{width:28px; height:28px; border-radius:50%; background:var(--pinbg); border:2px solid var(--pinink);
+  color:var(--pinink); box-shadow:0 1px 5px rgba(0,0,0,.3)}
 
 /* ── 상단 ── */
 .top{position:fixed; top:0; left:0; right:0; z-index:900;
@@ -746,6 +755,8 @@ a{color:var(--accent)}
 .tbar{display:flex; align-items:center; gap:8px; margin-bottom:9px; padding:0 4px}
 .brand{font-size:14px; font-weight:800; letter-spacing:-.03em; white-space:nowrap}
 .brand span{color:var(--ink-3); font-weight:600; font-size:11.5px; margin-left:7px; font-family:var(--mono)}
+/* 아주 좁은 화면(SE 등)에서 버튼 3개가 밀려나지 않게 날짜를 접는다 */
+@media (max-width:359px){.brand span{display:none}}
 .spacer{flex:1}
 .iconbtn{width:38px; height:38px; border-radius:11px; background:var(--panel); box-shadow:var(--shadow);
   display:grid; place-items:center; flex:0 0 auto}
@@ -774,7 +785,7 @@ a{color:var(--accent)}
 .scard[aria-current="true"]{border-color:var(--dc)}
 .scard.opt{border-style:dashed; border-color:var(--ink-3)}
 .scard .st{display:flex; align-items:center; gap:6px; margin-bottom:3px}
-.scard .num{width:17px; height:17px; border-radius:50%; background:var(--dc); color:#fff; font-family:var(--mono);
+.scard .num{width:17px; height:17px; border-radius:50%; background:var(--dc); color:var(--ondc); font-family:var(--mono);
   font-size:10px; font-weight:800; display:grid; place-items:center; flex:0 0 auto}
 .scard .num.mv{background:none; border:1.5px solid var(--dc); color:var(--dc); font-size:0}
 .scard .tm{font-family:var(--mono); font-size:11.5px; font-weight:700; color:var(--ink-2)}
@@ -799,7 +810,7 @@ a{color:var(--accent)}
 .sh-opt{margin:0 0 12px; font-size:12.5px; font-weight:700; color:var(--ink-3); font-family:var(--mono);
   border:1px dashed var(--line); border-radius:8px; padding:7px 11px; display:inline-block}
 .sh-head{display:flex; align-items:flex-start; gap:11px; margin-bottom:11px}
-.sh-num{width:27px; height:27px; border-radius:50%; background:var(--dc); color:#fff; flex:0 0 auto;
+.sh-num{width:27px; height:27px; border-radius:50%; background:var(--dc); color:var(--ondc); flex:0 0 auto;
   font-family:var(--mono); font-size:12px; font-weight:800; display:grid; place-items:center; margin-top:2px}
 .sh-num.mv{background:none; border:2px solid var(--dc); color:var(--dc)}
 .sh-t{font-size:19px; font-weight:800; letter-spacing:-.032em; line-height:1.3}
@@ -968,26 +979,42 @@ DAYS.forEach(d => { let n = 0; d.items.forEach(it => { it.stop = !MOVE.has(it.ki
 
 let day = 0, sel = -1;
 
+/* ───────── 화면 밝기 ─────────
+   저장해 둔 선택이 있으면 그걸, 없으면 폰 설정을 따른다. 지도 타일도 같이 바뀐다. */
+const THEMES = ['light', 'dark'];
+const mqDark = window.matchMedia ? matchMedia('(prefers-color-scheme:dark)') : null;
+let themeAuto = true;
+let theme = mqDark && mqDark.matches ? 'dark' : 'light';
+try { const s = localStorage.getItem('spmap_theme'); if (THEMES.includes(s)) { theme = s; themeAuto = false; } } catch (_) {}
+
 /* ───────── 지도 ───────── */
 const map = L.map('map', {
   zoomControl: false, attributionControl: false,
   zoomSnap: 0.25, wheelPxPerZoomLevel: 90, tap: true,
 }).setView([43.062, 141.350], 13);
 
-/* 밝고 컬러풀한 베이스(CARTO Voyager) + 낮은 축척에서만 영어 지명 오버레이 */
+/* 밝을 땐 컬러풀한 CARTO Voyager, 어두울 땐 같은 제작사의 다크 베이스맵.
+   반전 필터가 아니라 애초에 어둡게 그려진 타일이라 도로·물·공원이 그대로 구분된다. */
 const RETINA = (window.devicePixelRatio || 1) > 1.3 ? '@2x' : '';
-const TILE_URL = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}' + RETINA + '.png';
-const PLACES_URL = 'https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}';
+const TILE_URL = {
+  light: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}' + RETINA + '.png',
+  dark: 'https://{s}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}' + RETINA + '.png',
+};
+/* 영어 지명 오버레이도 밝기에 맞춰 글자색이 다른 걸로 바꾼다 */
+const PLACES_URL = {
+  light: 'https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',
+  dark: 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
+};
 const ATTR = '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> &middot; &copy; CARTO';
 L.control.attribution({ position: 'bottomleft', prefix: false }).addTo(map);
 
-const tileLayer = L.tileLayer(TILE_URL, {
+const tileLayer = L.tileLayer(TILE_URL[theme], {
   attribution: ATTR, subdomains: 'abcd', maxZoom: 19, minZoom: 8, detectRetina: false,
 }).addTo(map);
 tileLayer.on('tileerror', () => netWarn());
 
 /* 넓게 볼 때만 영어 지명(Sapporo / Chuo-Ku / Otaru …)을 얹는다. 확대하면 사라져 화면이 깨끗해진다 */
-const placesLayer = L.tileLayer(PLACES_URL, { maxZoom: 19, opacity: .95 });
+const placesLayer = L.tileLayer(PLACES_URL[theme], { maxZoom: 19, opacity: .95 });
 function syncPlaces() {
   const show = map.getZoom() <= 14.2;
   if (show && !map.hasLayer(placesLayer)) placesLayer.addTo(map);
@@ -1215,10 +1242,7 @@ $('#btnIn').onclick = () => map.zoomIn(1);
 $('#btnOut').onclick = () => map.zoomOut(1);
 $('#btnFit').onclick = () => fitDay();
 
-/* 화면 밝기 — 기본은 '밝게'. 폰이 다크모드여도 지도는 밝은 채로 둔다 */
-const THEMES = ['light', 'dark'];
-let theme = 'light';
-try { const s = localStorage.getItem('spmap_theme'); if (THEMES.includes(s)) theme = s; } catch (_) {}
+/* 화면 밝기 — UI와 지도 타일을 함께 바꾼다 (theme 값은 파일 위쪽에서 이미 정해 뒀다) */
 function applyTheme() {
   document.documentElement.setAttribute('data-theme', theme);
   const b = $('#btnTheme');
@@ -1228,13 +1252,25 @@ function applyTheme() {
       ? '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M4.2 12H2M22 12h-2.2M6.3 6.3L4.8 4.8M19.2 19.2l-1.5-1.5M17.7 6.3l1.5-1.5M4.8 19.2l1.5-1.5"/></svg>'
       : '<svg viewBox="0 0 24 24"><path d="M20 14.5A8.2 8.2 0 019.5 4 8.4 8.4 0 1020 14.5z"/></svg>';
   }
+  tileLayer.setUrl(TILE_URL[theme]);
+  placesLayer.setUrl(PLACES_URL[theme]);
+  drawRoute();   // 경로 색은 CSS 변수에서 읽어 오므로 다시 그려야 반영된다
 }
 applyTheme();
 $('#btnTheme').onclick = () => {
   theme = theme === 'light' ? 'dark' : 'light';
+  themeAuto = false;
   try { localStorage.setItem('spmap_theme', theme); } catch (_) {}
   applyTheme();
 };
+/* 직접 고른 적이 없으면 폰의 다크모드 전환을 그대로 따라간다 */
+if (mqDark && mqDark.addEventListener) {
+  mqDark.addEventListener('change', e => {
+    if (!themeAuto) return;
+    theme = e.matches ? 'dark' : 'light';
+    applyTheme();
+  });
+}
 
 /* ───────── 정보 모달 ───────── */
 function prose(txt) {
