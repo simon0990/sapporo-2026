@@ -236,6 +236,10 @@ footer .mono{font-size:11px; letter-spacing:.03em; margin-top:9px}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{transition:none!important}}
 .item.flash .card{animation:fl 1.6s ease-out}
 @keyframes fl{0%{background:color-mix(in srgb,var(--dc) 16%,transparent)}100%{background:transparent}}
+
+.pagenav{display:flex;gap:9px;flex-wrap:wrap;margin-top:22px}
+.pagenav a{flex:0 1 auto;text-decoration:none;font-size:13.5px;font-weight:750;padding:10px 16px;border-radius:10px;background:var(--panel);color:var(--accent);border:1px solid var(--line)}
+.pagenav a:hover{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 </style>
 </head>
 <body>
@@ -245,11 +249,13 @@ footer .mono{font-size:11px; letter-spacing:.03em; margin-top:9px}
 <div class="datechip">2026.08.21 금 — 08.25 화 · 4박 5일</div></div>
 <p class="sub">11:50에 내려 첫날부터 하루가 통째로 열리는 4박 5일. 토요일은 오타루만 온전히 쓰고, 일요일은 서쪽으로 갔다가 되감으며 모이와산 야경으로 닫는다. 월요일은 일부러 느리게 — 늦잠에서 시작해 오후를 통째로 비워 뒀다. 마지막 날은 관광시설을 하나도 넣지 않았다.</p>
 <dl class="facts">
-<div class="fact"><dt>일몰</dt><dd>18:29 → 18:24 · 서울보다 50분 이르다</dd></div>
+<div class="fact"><dt>일몰</dt><dd>18:29 → 18:22 · 서울보다 50분 이르다</dd></div>
 <div class="fact"><dt>기온</dt><dd>낮 26–30℃ / 아침·저녁 18–19℃</dd></div>
 <div class="fact"><dt>비</dt><dd>하루 확률 40–50% · 우산 2개 필수</dd></div>
 <div class="fact"><dt>축제</dt><dd>공백기 — 오도리 비어가든 8/18 종료</dd></div>
-</dl></div></header>
+</dl>
+<nav class="pagenav"><a href="./">지도로 보기</a><a href="guide.html">명소 가이드 · 후기와 링크</a></nav>
+</div></header>
 
 <main>
 <section class="wrap flights">
